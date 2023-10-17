@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:dev": "webpack-dev-server",
-    "build": "webpack",
-    "build:prod": "webpack --config webpack.config.prod.js"
+    "build:dev": "set NODE_OPTIONS=--openssl-legacy-provider && webpack-dev-server",
+    "build": "set NODE_OPTIONS=--openssl-legacy-provider && webpack",
+    "build:prod": "set NODE_OPTIONS=--openssl-legacy-provider &&webpack --config webpack.config.prod.js"
   },
   "author": "Maximilian Schwarzmüller",
   "license": "ISC",
