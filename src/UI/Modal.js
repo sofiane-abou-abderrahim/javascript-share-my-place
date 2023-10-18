@@ -33,9 +33,6 @@ export class Modal {
       document.body.removeChild(this.backdropElement);
       this.modalElement = null;
       this.backdropElement = null;
-      // I do this to tell Javascript that these properties are cleared
-      // and that the references to the DOM elements are no longer needed
-      // and can be cleaned up so that we don't have them in memory and create memory leaks
     }
   }
 }
