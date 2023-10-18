@@ -6,7 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "build:dev": "set NODE_OPTIONS=--openssl-legacy-provider && webpack-dev-server",
+    "build": "set NODE_OPTIONS=--openssl-legacy-provider && webpack",
+    "build:prod": "set NODE_OPTIONS=--openssl-legacy-provider &&webpack --config webpack.config.prod.js"
   },
   "author": "Maximilian Schwarzmüller",
   "license": "ISC",
