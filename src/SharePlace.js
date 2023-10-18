@@ -1,22 +1,34 @@
 import { Modal } from './UI/Modal';
 import { Map } from './UI/Map';
-import { getCoordsFromAddress } from './Utility/Location';
+import { getCoordsFromAddress, getAddressFromCoords } from './Utility/Location';
 
 class PlaceFinder {
   constructor() {
     const addressForm = document.querySelector('form');
     const locateUserBtn = document.getElementById('locate-btn');
+    this.shareBtn = document.getElementById('share-btn');
 
     locateUserBtn.addEventListener('click', this.locateUserHandler.bind(this));
+    // this.shareBtn.addEventListener('click');
     addressForm.addEventListener('submit', this.findAddressHandler.bind(this));
   }
 
-  selectPlace(coordinates) {
+  selectPlace(coordinates, address) {
+    // accepts both arguments now
     if (this.map) {
       this.map.render(coordinates);
     } else {
       this.map = new Map(coordinates);
     }
+
+    // we want to create a sharable link and output it in my-place/index.html
+    this.shareBtn.disabled = false; // we enable the button which is disabled initially in index.html
+    const sharedLinkInputElement = document.getElementById('share-link');
+    sharedLinkInputElement.value = `${
+      location.origin
+    }/my-place?address=${encodeURI(address)}&lat=${coordinates.lat}&lng=${
+      coordinates.lng
+    }`;
   }
 
   locateUserHandler() {
@@ -32,13 +44,16 @@ class PlaceFinder {
     );
     modal.show();
     navigator.geolocation.getCurrentPosition(
-      successResult => {
-        modal.hide();
+      async successResult => {
         const coordinates = {
           lat: successResult.coords.latitude + Math.random() * 50, // to not display my current position
           lng: successResult.coords.longitude + Math.random() * 50 // to not display my current position
         };
-        this.selectPlace(coordinates);
+
+        const address = await getAddressFromCoords(coordinates); // we get the address now
+        modal.hide();
+
+        this.selectPlace(coordinates, address); // now we forward the address here
       },
       error => {
         modal.hide();
@@ -72,7 +87,7 @@ class PlaceFinder {
 
     try {
       const coordinates = await getCoordsFromAddress(address); // we get the coordinates
-      this.selectPlace(coordinates); // we forward the coordinates in exactly the same format we would get them if we auto locate the user
+      this.selectPlace(coordinates, address); // we forward the coordinates and address in exactly the same format we would get them if we auto locate the user
     } catch (err) {
       alert(err.message); // this will display the error message set in Location.js
     } // because it might fail though
