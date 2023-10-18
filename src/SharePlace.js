@@ -1,5 +1,6 @@
 import { Modal } from './UI/Modal';
 import { Map } from './UI/Map';
+import { getCoordsFromAddress } from './Utility/Location';
 
 class PlaceFinder {
   constructor() {
@@ -48,7 +49,7 @@ class PlaceFinder {
     );
   }
 
-  findAddressHandler(event) {
+  async findAddressHandler(event) {
     event.preventDefault();
     const address = event.target.querySelector('input').value;
     if (!address || address.trim().length === 0) {
@@ -67,8 +68,15 @@ class PlaceFinder {
     which we can use to translate the entered address (which could be something like a street name) into coordinates
     (see Utility/Location.js) This should be a file which holds utility methods for getting coordinates for an address for example
 
-
     */
+
+    try {
+      const coordinates = await getCoordsFromAddress(address); // we get the coordinates
+      this.selectPlace(coordinates); // we forward the coordinates in exactly the same format we would get them if we auto locate the user
+    } catch (err) {
+      alert(err.message); // this will display the error message set in Location.js
+    } // because it might fail though
+    modal.hide();
   }
 }
 
