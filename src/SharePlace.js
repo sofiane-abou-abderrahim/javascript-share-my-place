@@ -48,9 +48,28 @@ class PlaceFinder {
     );
   }
 
-  findAddressHandler() {}
+  findAddressHandler(event) {
+    event.preventDefault();
+    const address = event.target.querySelector('input').value;
+    if (!address || address.trim().length === 0) {
+      alert('Invalid address entered - please try again!');
+      return;
+    }
+    const modal = new Modal(
+      'loading-modal-content',
+      'Loading location - please wait!'
+    );
+    modal.show();
+
+    /* 
+    
+    Next, we need to make sure that we reach out to Google's servers because they do have an API for us 
+    which we can use to translate the entered address (which could be something like a street name) into coordinates
+    (see Utility/Location.js) This should be a file which holds utility methods for getting coordinates for an address for example
+
+
+    */
+  }
 }
 
 const placeFinder = new PlaceFinder();
-// we need to make sure that we of course trigger our constructor here for the PlaceFinder
-// and we do that by instantiating PlaceFinder.
