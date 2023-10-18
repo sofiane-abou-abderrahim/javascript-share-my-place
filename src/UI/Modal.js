@@ -6,6 +6,7 @@ export class Modal {
   }
   show() {
     if ('content' in document.createElement('template')) {
+      // this is simply a little trick for checking if we do support the template tag or not
       const modalElements = document.importNode(
         this.modalTemplateEl.content,
         true
